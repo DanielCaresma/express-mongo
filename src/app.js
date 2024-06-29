@@ -1,6 +1,6 @@
 import express from "express"
 import conectaNaDataBase from "./config/dbConect.js"
-import livro from "./models/Livro.js"
+import routes from "./routes/index.js"
 
 const conexão = await conectaNaDataBase()
 
@@ -13,16 +13,7 @@ conexão.once("open", () => {
 })
 
 const app = express()
-app.use(express.json())
-
-app.get("/", (req, res) => {
-    res.status(200).send("Curso de Node.js")
-})
-
-app.get("/livros", async (req, res) => {
-    const listaLivros = await livro.find({})
-    res.status(200).json(listaLivros)
-})
+routes(app)
 
 app.get("/livros/:id", (req, res) => {
     const index = buscaLivro(req.params.id)
@@ -31,7 +22,7 @@ app.get("/livros/:id", (req, res) => {
 
 app.post("/livros", (req, res) => {
     livros.push(req.body)
-    res.status(201).send("Livro cadastrado com sucesso")
+    // res.status(201).send("Livro cadastrado com sucesso")
 })
 
 app.put("/livros/:id", (req, res) => {
